@@ -1,0 +1,62 @@
+version: '3.9'
+
+services:
+
+  user-service:
+    build:
+      context: ./springboot-user-service
+    container_name: springboot-user-service
+
+    ports:
+      - "8081:8081"
+
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/user_service
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+
+      SPRING_DATA_REDIS_HOST: redis
+      SPRING_DATA_REDIS_PORT: 6379
+
+      JWT_SECRET: 2dff20cfbd9ca6d9b17d06bea4904dc985cbca7a97ec73d78a1254dd6ea7ad63b271107bbc3e5f575b294eccc37a985c62f7a58f5f086f35298f9c5a8f35401e
+
+    depends_on:
+      - postgres
+      - redis
+
+    networks:
+      - backend-network
+
+  postgres:
+    image: postgres:16
+    container_name: postgres
+
+    environment:
+      POSTGRES_DB: user_service
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+
+    ports:
+      - "5432:5432"
+
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+    networks:
+      - backend-network
+
+  redis:
+    image: redis:7
+    container_name: redis
+
+    ports:
+      - "6379:6379"
+
+    networks:
+      - backend-network
+
+networks:
+  backend-network:
+
+volumes:
+  postgres-data:
