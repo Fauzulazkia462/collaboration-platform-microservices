@@ -1,0 +1,8 @@
+fastapi
+uvicorn
+django
+djangorestframework
+psycopg2-binary
+sqlalchemy
+confluent-kafka
+python-dotenv
