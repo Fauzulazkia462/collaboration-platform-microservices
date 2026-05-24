@@ -4,7 +4,7 @@ spring:
   application:
     name: springboot-user-service
   datasource:
-    url: jdbc:postgresql://postgres:5432/user_service
+    url: jdbc:postgresql://postgres:5432/collaboration_platform
     username: postgres
     password: postgres
   jpa:
