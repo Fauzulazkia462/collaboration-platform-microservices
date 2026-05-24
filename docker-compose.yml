@@ -63,6 +63,32 @@ services:
     networks:
       - backend-network
 
+  activity-service:
+    build:
+      context: ./django-activity-service
+    container_name: django-activity-service
+
+    ports:
+      - "8000:8000"
+
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_NAME: collaboration_platform
+
+      KAFKA_BROKER: kafka:9092
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+
+    networks:
+      - backend-network
+
   postgres:
     image: postgres:16
     container_name: postgres
@@ -120,6 +146,11 @@ services:
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    healthcheck:
+      test: ["CMD", "kafka-topics", "--bootstrap-server", "localhost:9092", "--list"]
+      interval: 10s
+      timeout: 10s
+      retries: 10
     networks:
       - backend-network
 
