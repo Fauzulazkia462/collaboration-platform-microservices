@@ -11,7 +11,7 @@ services:
       - "8081:8081"
 
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/user_service
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/collaboration_platform
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: postgres
 
@@ -21,8 +21,44 @@ services:
       JWT_SECRET: 2dff20cfbd9ca6d9b17d06bea4904dc985cbca7a97ec73d78a1254dd6ea7ad63b271107bbc3e5f575b294eccc37a985c62f7a58f5f086f35298f9c5a8f35401e
 
     depends_on:
-      - postgres
-      - redis
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+
+    networks:
+      - backend-network
+
+  project-service:
+    build:
+      context: ./nodejsexpress-project-service
+    container_name: nodejs-project-service
+
+    ports:
+      - "3001:3001"
+
+    environment:
+      PORT: 3001
+
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_NAME: collaboration_platform
+
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+
+      #the same secret key as what the user service has
+      JWT_SECRET: 2dff20cfbd9ca6d9b17d06bea4904dc985cbca7a97ec73d78a1254dd6ea7ad63b271107bbc3e5f575b294eccc37a985c62f7a58f5f086f35298f9c5a8f35401e
+
+      KAFKA_BROKER: kafka:9092
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
 
     networks:
       - backend-network
@@ -32,7 +68,7 @@ services:
     container_name: postgres
 
     environment:
-      POSTGRES_DB: user_service
+      POSTGRES_DB: collaboration_platform
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
 
@@ -45,6 +81,12 @@ services:
     networks:
       - backend-network
 
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
   redis:
     image: redis:7
     container_name: redis
@@ -52,6 +94,32 @@ services:
     ports:
       - "6379:6379"
 
+    networks:
+      - backend-network
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.6.0
+    container_name: zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "2181:2181"
+    networks:
+      - backend-network
+
+  kafka:
+    image: confluentinc/cp-kafka:7.6.0
+    container_name: kafka
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
     networks:
       - backend-network
 
