@@ -9,6 +9,10 @@ class ProjectEventPublisher {
     taskCreated(task) {
         sendEvent("task.created", task);
     }
+
+    taskNotificationCreated(task) {
+        sendEvent("task.notification.created", task);
+    }
 }
 
 module.exports = new ProjectEventPublisher();

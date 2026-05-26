@@ -23,6 +23,7 @@ class ProjectService {
         );
 
         eventPublisher.taskCreated(task);
+        eventPublisher.taskNotificationCreated(task);
 
         return task;
     }
