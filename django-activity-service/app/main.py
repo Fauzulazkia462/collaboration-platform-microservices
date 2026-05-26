@@ -6,7 +6,10 @@ from app.db.init_db import init_db
 
 app = FastAPI()
 
-app.include_router(router)
+app.include_router(
+    router,
+    prefix="/api/v1"
+)
 
 # start kafka consumer in background
 threading.Thread(target=listen, daemon=True).start()
