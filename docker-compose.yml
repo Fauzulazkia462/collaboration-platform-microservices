@@ -1,31 +1,23 @@
-version: '3.9'
-
 services:
 
   user-service:
     build:
       context: ./springboot-user-service
     container_name: springboot-user-service
-
     ports:
       - "8081:8081"
-
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/collaboration_platform
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: postgres
-
       SPRING_DATA_REDIS_HOST: redis
       SPRING_DATA_REDIS_PORT: 6379
-
       JWT_SECRET: 2dff20cfbd9ca6d9b17d06bea4904dc985cbca7a97ec73d78a1254dd6ea7ad63b271107bbc3e5f575b294eccc37a985c62f7a58f5f086f35298f9c5a8f35401e
-
     depends_on:
       postgres:
         condition: service_healthy
       redis:
         condition: service_started
-
     networks:
       - backend-network
 
@@ -33,33 +25,25 @@ services:
     build:
       context: ./nodejsexpress-project-service
     container_name: nodejs-project-service
-
     ports:
       - "3001:3001"
-
     environment:
       PORT: 3001
-
       DB_HOST: postgres
       DB_PORT: 5432
       DB_USER: postgres
       DB_PASSWORD: postgres
       DB_NAME: collaboration_platform
-
       REDIS_HOST: redis
       REDIS_PORT: 6379
-
       #the same secret key as what the user service has
       JWT_SECRET: 2dff20cfbd9ca6d9b17d06bea4904dc985cbca7a97ec73d78a1254dd6ea7ad63b271107bbc3e5f575b294eccc37a985c62f7a58f5f086f35298f9c5a8f35401e
-
       KAFKA_BROKER: kafka:9092
-
     depends_on:
       postgres:
         condition: service_healthy
       redis:
         condition: service_started
-
     networks:
       - backend-network
 
@@ -67,47 +51,36 @@ services:
     build:
       context: ./django-activity-service
     container_name: django-activity-service
-
     ports:
       - "8000:8000"
-
     environment:
       DB_HOST: postgres
       DB_PORT: 5432
       DB_USER: postgres
       DB_PASSWORD: postgres
       DB_NAME: collaboration_platform
-
       KAFKA_BROKER: kafka:9092
-
       #the same secret key as what the user service has
       JWT_SECRET: 2dff20cfbd9ca6d9b17d06bea4904dc985cbca7a97ec73d78a1254dd6ea7ad63b271107bbc3e5f575b294eccc37a985c62f7a58f5f086f35298f9c5a8f35401e
-
     depends_on:
       postgres:
         condition: service_healthy
       kafka:
-        condition: service_healthy
-
+        condition: service_started
     networks:
       - backend-network
   
   notification-service:
     build:
       context: ./laravel-notification-service
-
     container_name: laravel-notification-service
-
     volumes:
       - ./laravel-notification-service:/var/www
-
     environment:
       APP_ENV: local
       APP_DEBUG: true
-
       KAFKA_BROKER: kafka:9092
       REDIS_HOST: redis
-
     depends_on:
       postgres:
         condition: service_healthy
@@ -115,28 +88,62 @@ services:
         condition: service_started
       redis:
         condition: service_started
-
     networks:
       - backend-network
+
+  analytics-service:
+    build:
+      context: ./.net-analytics-service
+      dockerfile: Dockerfile
+    container_name: dotnet-analytics-service
+    ports:
+      - "8084:8080"
+    depends_on:
+      kafka:
+        condition: service_started
+      postgres-analytics:
+        condition: service_healthy
+    environment:
+      #the same secret key as what the user service has
+      JWT_SECRET: 2dff20cfbd9ca6d9b17d06bea4904dc985cbca7a97ec73d78a1254dd6ea7ad63b271107bbc3e5f575b294eccc37a985c62f7a58f5f086f35298f9c5a8f35401e
+      ASPNETCORE_URLS: http://+:8080
+      ConnectionStrings__Postgres: Host=postgres-analytics;Port=5432;Database=analyticsdb;Username=postgres;Password=postgres
+      KAFKA_BROKER: kafka:9092
+    networks:
+      - backend-network
+
+  postgres-analytics:
+    image: postgres:16
+    container_name: postgres-analytics
+    environment:
+      POSTGRES_DB: analyticsdb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5436:5432"
+    volumes:
+      - postgres-analytics-data:/var/lib/postgresql/data
+    networks:
+      - backend-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d analyticsdb"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
 
   postgres:
     image: postgres:16
     container_name: postgres
-
     environment:
       POSTGRES_DB: collaboration_platform
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-
     ports:
       - "5432:5432"
-
     volumes:
       - postgres-data:/var/lib/postgresql/data
-
     networks:
       - backend-network
-
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 5s
@@ -146,10 +153,8 @@ services:
   redis:
     image: redis:7
     container_name: redis
-
     ports:
       - "6379:6379"
-
     networks:
       - backend-network
 
@@ -186,6 +191,7 @@ services:
   
   kafka-init:
     image: confluentinc/cp-kafka:7.6.0
+    container_name: kafka-init
     depends_on:
       kafka:
         condition: service_healthy
@@ -205,3 +211,4 @@ networks:
 
 volumes:
   postgres-data:
+  postgres-analytics-data:
