@@ -8,8 +8,10 @@
     "dev": "nodemon server.js"
   },
   "dependencies": {
+    "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
+    "ioredis": "^5.11.0",
     "jsonwebtoken": "^9.0.3",
     "kafka-node": "^5.0.0",
     "pg": "^8.21.0",
