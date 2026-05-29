@@ -20,7 +20,12 @@ public class KafkaConsumerService : BackgroundService
         {
             BootstrapServers = "kafka:9092",
             GroupId = "analytics-group",
-            AutoOffsetReset = AutoOffsetReset.Earliest
+            AutoOffsetReset = AutoOffsetReset.Earliest,
+
+            SocketTimeoutMs = 10000,
+            SessionTimeoutMs = 6000,
+            ReconnectBackoffMs = 1000,
+            ReconnectBackoffMaxMs = 10000
         };
 
         using var consumer = new ConsumerBuilder<Ignore, string>(config)
