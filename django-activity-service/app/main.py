@@ -3,8 +3,11 @@ from app.api.routes import router
 import threading
 from app.consumers.kafka_consumer import listen
 from app.db.init_db import init_db
+from app.config.corsConfig import setup_cors
 
 app = FastAPI()
+
+setup_cors(app)
 
 app.include_router(
     router,

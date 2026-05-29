@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using StackExchange.Redis;
+using Analytics.API.Config;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -88,10 +89,14 @@ builder.Services.Configure<HostOptions>(options =>
         BackgroundServiceExceptionBehavior.Ignore;
 });
 
+builder.Services.AddCorsConfig();
+
 var app = builder.Build();
 
 app.UseSwagger();
 app.UseSwaggerUI();
+
+app.UseCorsConfig();
 
 app.UseAuthentication();
 app.UseAuthorization();
