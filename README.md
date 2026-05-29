@@ -22,6 +22,33 @@ The frontend global state is carefully managed to ensure maintainability across 
 
 ---
 
+## Tech Stack
+
+### Frontend
+- React (Host Application)
+- Vue 3 (Microfrontend - Project Module)
+- TypeScript
+- Zustand (State Management)
+- Axios
+
+### Backend Services
+- Spring Boot (Authentication Service + JWT)
+- Node.js (Project & Task Service)
+- Django (Activity Service)
+- Laravel (Notification Service)
+- .NET (Analytics Service)
+
+### Communication & Infrastructure
+- Kafka (Event Streaming / Async Communication)
+- Redis (JWT Blacklist / Token Revocation)
+- PostgreSQL (Primary Database)
+
+### DevOps
+- Docker
+- Docker Compose
+
+---
+
 ## System Architecture
 
 <img src=".readme-images/system_architecture.png" alt="System Architecture Diagram" width="900"/>
@@ -35,7 +62,7 @@ The frontend global state is carefully managed to ensure maintainability across 
 Logout does not immediately invalidate JWT tokens.
 
 Instead:
-- The token is stored in Redis blacklist
+- Token is stored in Redis blacklist
 - Format: `blacklist:<token>`
 - All services validate tokens against Redis before accepting requests
 
@@ -46,8 +73,8 @@ Instead:
 ### Create Task Flow
 
 - Node.js service handles task creation
-- Sends event to Kafka
-- Other services consume the event asynchronously
+- Publishes event to Kafka
+- Other services consume events asynchronously
 
 <img src=".readme-images/create_task_seq_diagram.png" alt="Create Task Flow Diagram" width="900"/>
 
