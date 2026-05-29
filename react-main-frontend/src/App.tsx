@@ -3,6 +3,7 @@ import { Routes, Route, Navigate } from "react-router-dom"
 
 import Layout from "./layout/Layout"
 import Dashboard from "./pages/Dashboard"
+import ProjectPageLoader from "./pages/ProjectPageLoader"
 import Login from "./pages/Login"
 import Register from "./pages/Register"
 
@@ -53,6 +54,7 @@ export default function App() {
         }
       >
         <Route path="dashboard" element={<Dashboard />} />
+        <Route path="project" element={<ProjectPageLoader />} />
       </Route>
 
     </Routes>

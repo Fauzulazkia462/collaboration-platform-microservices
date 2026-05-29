@@ -20,6 +20,7 @@ export default function Layout() {
 
                 <nav className="flex flex-col gap-3">
                     <Link to="/dashboard">Dashboard</Link>
+                    <Link to="/project">Project</Link>
 
                     <button onClick={handleLogout} className="mt-4 text-red-400">
                         Logout
