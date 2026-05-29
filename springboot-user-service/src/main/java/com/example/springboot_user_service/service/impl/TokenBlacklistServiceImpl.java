@@ -20,7 +20,7 @@ public class TokenBlacklistServiceImpl implements TokenBlacklistService {
         redisTemplate.opsForValue().set(
                 PREFIX + token,
                 "true",
-                Duration.ofHours(2) // match your JWT expiration
+                Duration.ofHours(2)
         );
     }
 
