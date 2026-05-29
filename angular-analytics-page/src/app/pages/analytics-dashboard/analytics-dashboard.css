@@ -1,0 +1,76 @@
+.container {
+    padding: 20px;
+    background: linear-gradient(135deg, #0f172a, #111827);
+    min-height: 100vh;
+    color: #e5e7eb;
+}
+
+h2 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #f9fafb;
+    margin-bottom: 8px;
+}
+
+.header {
+    margin-bottom: 16px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.card,
+.stats-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 16px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+    transition: all 0.2s ease;
+}
+
+.project-card {
+    padding: 12px;
+    border-radius: 12px;
+    margin-top: 10px;
+    cursor: pointer;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    transition: all 0.2s ease;
+}
+
+.activity-card {
+    padding: 12px;
+    border-radius: 12px;
+    margin-top: 10px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    transition: all 0.2s ease;
+}
+
+.project-card:hover {
+    transform: translateY(-2px);
+    background: rgba(96, 165, 250, 0.08);
+    border-color: rgba(96, 165, 250, 0.3);
+}
+
+.muted {
+    color: rgba(229, 231, 235, 0.6);
+    font-size: 13px;
+}
+
+.stats-card {
+    margin-bottom: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.stats-card strong {
+    font-size: 28px;
+    color: #60a5fa;
+}

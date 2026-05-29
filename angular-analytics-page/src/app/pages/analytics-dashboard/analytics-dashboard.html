@@ -1,0 +1,49 @@
+<div class="container">
+    <div class="stats-card">
+        <h2>Today's Created Tasks</h2>
+
+        <div *ngIf="todayStats">
+            <strong>{{ todayStats.createdTasks }}</strong>
+        </div>
+    </div>
+
+    <div class="grid">
+
+        <div class="card">
+            <h2>Projects</h2>
+
+            <div *ngIf="loading">
+                Loading...
+            </div>
+
+            <div class="project-card" *ngFor="let p of projects" (click)="openProject(p)">
+                <strong>{{ p.name }}</strong>
+
+                <p class="muted">
+                    {{ p.description }}
+                </p>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Activities</h2>
+
+            <div *ngIf="!activities.length">
+                No activities
+            </div>
+
+            <div class="activity-card" *ngFor="let a of activities">
+                <strong>{{ a.event_type }}</strong>
+
+                <p class="muted">
+                    {{ a.payload.name || a.payload.title }}
+                </p>
+
+                <p class="muted">
+                    {{ a.created_at }}
+                </p>
+            </div>
+        </div>
+
+    </div>
+</div>
