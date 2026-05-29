@@ -120,8 +120,10 @@ services:
     ports:
       - "3000:80"
     environment:
-      - VITE_PROJECT_APP_BASE=http://vue-project-frontend:5174
-      - VITE_PROJECT_APP_ENTRY=/src/entry.ts
+      - VITE_PROJECT_VUE_APP_BASE=http://vue-project-frontend:5174
+      - VITE_PROJECT_VUE_APP_ENTRY=/src/entry.ts
+      - VITE_PROJECT_ANGULAR_APP_BASE=http://angular-analytics-frontend:4200
+      - VITE_PROJECT_ANGULAR_APP_ENTRY=/main.js
     depends_on:
       - project-service
       - activity-service
@@ -139,6 +141,16 @@ services:
     environment:
       VITE_HOST: 0.0.0.0
       VITE_PORT: 5174
+    networks:
+      - backend-network
+
+  angular-analytics-frontend:
+    build:
+      context: ./angular-analytics-page
+      dockerfile: Dockerfile
+    container_name: angular-analytics-frontend
+    ports:
+      - "4200:4200"
     networks:
       - backend-network
 
