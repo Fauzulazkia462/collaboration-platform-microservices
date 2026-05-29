@@ -59,6 +59,8 @@ services:
       DB_USER: postgres
       DB_PASSWORD: postgres
       DB_NAME: collaboration_platform
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
       KAFKA_BROKER: kafka:9092
       #the same secret key as what the user service has
       JWT_SECRET: 2dff20cfbd9ca6d9b17d06bea4904dc985cbca7a97ec73d78a1254dd6ea7ad63b271107bbc3e5f575b294eccc37a985c62f7a58f5f086f35298f9c5a8f35401e
@@ -80,13 +82,10 @@ services:
       APP_ENV: local
       APP_DEBUG: true
       KAFKA_BROKER: kafka:9092
-      REDIS_HOST: redis
     depends_on:
       postgres:
         condition: service_healthy
       kafka:
-        condition: service_started
-      redis:
         condition: service_started
     networks:
       - backend-network
@@ -109,6 +108,21 @@ services:
       ASPNETCORE_URLS: http://+:8080
       ConnectionStrings__Postgres: Host=postgres-analytics;Port=5432;Database=analyticsdb;Username=postgres;Password=postgres
       KAFKA_BROKER: kafka:9092
+      REDIS_HOST: redis:6379
+    networks:
+      - backend-network
+
+  react-main-frontend:
+    build:
+      context: ./react-main-frontend
+      dockerfile: Dockerfile
+    container_name: react-main-frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - project-service
+      - activity-service
+      - analytics-service
     networks:
       - backend-network
 
