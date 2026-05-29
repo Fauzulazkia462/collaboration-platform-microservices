@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "angular-analytics-frontend": {
+    "angular-analytics-page": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -56,10 +56,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "angular-analytics-frontend:build:production"
+              "buildTarget": "angular-analytics-page:build:production"
             },
             "development": {
-              "buildTarget": "angular-analytics-frontend:build:development"
+              "buildTarget": "angular-analytics-page:build:development"
             }
           },
           "defaultConfiguration": "development"
