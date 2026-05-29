@@ -5,7 +5,7 @@ export const TaskApi = {
         return http.get(`/projects/tasks`);
     },
 
-    getByProject(projectId: string) {
+    getByProject(projectId: number) {
         return http.get(`/projects/tasks/project/${projectId}`);
     },
 

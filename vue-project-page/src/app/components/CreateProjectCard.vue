@@ -7,7 +7,7 @@
 
     <button
       :disabled="!name || !description"
-      @click="submit"
+      @click="create"
     >
       Create Project
     </button>
