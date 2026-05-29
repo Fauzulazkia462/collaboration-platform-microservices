@@ -14,7 +14,7 @@ This system simulates a real-world **team collaboration platform** where users c
 - Receive simulated notifications (email, SMS, etc.)
 - View analytics dashboards
 
-It is built using a **polyglot microservices architecture**, combining multiple backend technologies, event-driven communication, and a microfrontend frontend system.
+It is built using a **polyglot microservices architecture**, combining multiple backend technologies, event-driven communication, and multiple frontend clients (including microfrontends).
 
 The backends are built with **SOLID principles**, making the system more scalable, maintainable, and readable.
 
@@ -27,6 +27,7 @@ The frontend global state is carefully managed to ensure maintainability across 
 ### Frontend
 - React (Host Application)
 - Vue 3 (Microfrontend - Project Module)
+- Angular (Microfrontend - Analytics Module)
 - TypeScript
 - Zustand (State Management)
 - Axios
