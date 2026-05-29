@@ -1,4 +1,4 @@
-# Full-Stack Microservices Developer Collaboration Platform
+# Full-Stack Microservices Collaboration Platform
 
 A production-style **microservices-based collaboration system** built as a portfolio project to demonstrate **3+ years of software engineering experience** across backend, frontend, distributed systems, and cloud-native architecture.
 
