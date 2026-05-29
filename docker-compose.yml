@@ -119,10 +119,26 @@ services:
     container_name: react-main-frontend
     ports:
       - "3000:80"
+    environment:
+      - VITE_PROJECT_APP_BASE=http://vue-project-frontend:5174
+      - VITE_PROJECT_APP_ENTRY=/src/entry.ts
     depends_on:
       - project-service
       - activity-service
       - analytics-service
+    networks:
+      - backend-network
+
+  vue-project-frontend:
+    build:
+      context: ./vue-project-page
+      dockerfile: Dockerfile
+    container_name: vue-project-frontend
+    ports:
+      - "5174:5174"
+    environment:
+      VITE_HOST: 0.0.0.0
+      VITE_PORT: 5174
     networks:
       - backend-network
 
