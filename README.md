@@ -26,14 +26,14 @@ The frontend global state is carefully managed to ensure maintainability across 
 
 ### Frontend
 - React (Host Application)
-- Vue 3 (Microfrontend - Project Module)
+- Vue (Microfrontend - Project Module)
 - Angular (Microfrontend - Analytics Module)
 - TypeScript
 - Zustand (State Management)
 - Axios
 
 ### Backend Services
-- Spring Boot (Authentication Service + JWT)
+- Spring Boot (Authentication Service + JWT + RBAC)
 - Node.js (Project & Task Service)
 - Django (Activity Service)
 - Laravel (Notification Service)
@@ -78,6 +78,19 @@ Instead:
 - Other services consume events asynchronously
 
 <img src=".readme-images/create_task_seq_diagram.png" alt="Create Task Flow Diagram" width="900"/>
+
+---
+
+## What's Missing?
+
+This project intentionally does not yet include:
+
+- API Gateway
+- Single Sign-On (SSO)
+
+The current architecture is designed to remain scalable and extensible, making it possible to integrate both API Gateway and SSO in the future without major architectural changes.
+
+Since authentication is already centralized through the Spring Boot authentication service and JWT-based authorization is shared across services, implementing centralized identity providers or gateway-based routing can be added naturally in the future.
 
 ---
 
